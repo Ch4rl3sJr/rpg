@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Criação de Personagem</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="dashboard-container fade-in">
+    <div class="card">
+      <h2>Criar Personagem</h2>
+      <form id="charForm">
+        <label>Nome do Personagem:
+          <input type="text" id="nome" required>
+        </label>
+        <label>Raça:
+          <select id="raca">
+            <option value="humano">Humano</option>
+            <option value="elfo">Elfo</option>
+            <option value="anão">Anão</option>
+            <option value="orc">Orc</option>
+          </select>
+        </label>
+        <label>Classe:
+          <select id="classe">
+            <option value="guerreiro">Guerreiro (Força, Constituição)</option>
+            <option value="mago">Mago (Inteligência, Poder)</option>
+            <option value="ladino">Ladino (Destreza, Percepção)</option>
+            <option value="bárbaro">Bárbaro (Força, Constituição)</option>
+            <option value="clérigo">Clérigo (Carisma, Poder)</option>
+          </select>
+        </label>
+        
+        <h4>Distribua até 50 pontos entre os atributos</h4>
+        <div class="atributos">
+          <label>Força: <input type="number" class="atributo" id="forca" min="0" value="0"></label>
+          <label>Destreza: <input type="number" class="atributo" id="destreza" min="0" value="0"></label>
+          <label>Constituição: <input type="number" class="atributo" id="constituicao" min="0" value="0"></label>
+          <label>Inteligência: <input type="number" class="atributo" id="inteligencia" min="0" value="0"></label>
+          <label>Percepção: <input type="number" class="atributo" id="percepcao" min="0" value="0"></label>
+          <label>Carisma: <input type="number" class="atributo" id="carisma" min="0" value="0"></label>
+          <label>Poder: <input type="number" class="atributo" id="poder" min="0" value="0"></label>
+        </div>
+        <p id="totalPontos">Pontos usados: 0 / 50</p>
+        <div id="statusDisplay" class="status">
+          <p><span class="hp">❤️ Vida:</span> 0</p>
+          <p><span class="mp">🔷 Mana:</span> 0</p>
+        </div>
+        
+        <button type="submit" id="saveBtn">Salvar Personagem</button>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Redireciona se o usuário não estiver logado
+    const username = localStorage.getItem("loggedInUser");
+    if (!username) window.location.href = "index.html";
+    
+    const users = JSON.parse(localStorage.getItem("users")) || {};
+    const atributos = document.querySelectorAll(".atributo");
+    const totalPontosEl = document.getElementById("totalPontos");
+    const statusDisplay = document.getElementById("statusDisplay");
+    const classeSelect = document.getElementById("classe");
+    
+    // Atualiza os pontos totais e valida
+    function atualizarPontos() {
+      let total = 0;
+      atributos.forEach(input => {
+        total += parseInt(input.value) || 0;
+      });
+      totalPontosEl.textContent = `Pontos usados: ${total} / 50`;
+      totalPontosEl.style.color = total > 50 ? "red" : "green";
+      return total;
+    }
+    
+    // Calcula HP e MP com base na classe e atributos
+    function calcularStatus(classe, atr) {
+      let vida = 0, mana = 0;
+      switch (classe) {
+        case "guerreiro":
+          vida = 50 + (2 * atr.constituicao) + (1 * atr.forca);
+          mana = 20 + (1 * atr.carisma);
+          break;
+        case "mago":
+          vida = 30 + (1 * atr.constituicao);
+          mana = 60 + (2 * atr.inteligencia) + (1 * atr.poder);
+          break;
+        case "ladino":
+          vida = 40 + (1 * atr.constituicao) + (1 * atr.destreza);
+          mana = 30 + (1 * atr.inteligencia) + (1 * atr.percepcao);
+          break;
+        case "bárbaro":
+          vida = 60 + (2 * atr.forca) + (1 * atr.constituicao);
+          mana = 10 + (1 * atr.carisma);
+          break;
+        case "clérigo":
+          vida = 45 + (1 * atr.constituicao) + (1 * atr.carisma);
+          mana = 40 + (2 * atr.poder) + (1 * atr.carisma);
+          break;
+        default:
+          break;
+      }
+      return { vida, mana };
+    }
+    
+    // Efeito de flash para o bloco de status
+    function flashStatus() {
+      statusDisplay.classList.add("flash");
+      setTimeout(() => {
+        statusDisplay.classList.remove("flash");
+      }, 300);
+    }
+    
+    // Atualiza os status (HP/MP) dinamicamente
+    function atualizarStatus() {
+      const atr = {
+        forca: parseInt(document.getElementById("forca").value) || 0,
+        destreza: parseInt(document.getElementById("destreza").value) || 0,
+        constituicao: parseInt(document.getElementById("constituicao").value) || 0,
+        inteligencia: parseInt(document.getElementById("inteligencia").value) || 0,
+        percepcao: parseInt(document.getElementById("percepcao").value) || 0,
+        carisma: parseInt(document.getElementById("carisma").value) || 0,
+        poder: parseInt(document.getElementById("poder").value) || 0
+      };
+      const classe = document.getElementById("classe").value;
+      const { vida, mana } = calcularStatus(classe, atr);
+      statusDisplay.innerHTML = `
+        <p><span class="hp">❤️ Vida:</span> ${vida}</p>
+        <p><span class="mp">🔷 Mana:</span> ${mana}</p>
+      `;
+      flashStatus();
+    }
+    
+    // Eventos de atualização
+    atributos.forEach(input => {
+      input.addEventListener("input", () => {
+        atualizarPontos();
+        atualizarStatus();
+      });
+    });
+    classeSelect.addEventListener("change", atualizarStatus);
+    
+    atualizarPontos();
+    atualizarStatus();
+    
+    // Efeito do botão ao salvar: clique com fade out e depois redireciona
+    document.getElementById("charForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      if (atualizarPontos() > 50) {
+        alert("Você excedeu o limite de 50 pontos!");
+        return;
+      }
+      
+      const personagem = {
+        nome: document.getElementById("nome").value,
+        raca: document.getElementById("raca").value,
+        classe: document.getElementById("classe").value,
+        atributos: {
+          forca: parseInt(document.getElementById("forca").value) || 0,
+          destreza: parseInt(document.getElementById("destreza").value) || 0,
+          constituicao: parseInt(document.getElementById("constituicao").value) || 0,
+          inteligencia: parseInt(document.getElementById("inteligencia").value) || 0,
+          percepcao: parseInt(document.getElementById("percepcao").value) || 0,
+          carisma: parseInt(document.getElementById("carisma").value) || 0,
+          poder: parseInt(document.getElementById("poder").value) || 0,
+        }
+      };
+      
+      users[username] = { password: users[username]?.password || "", personagem };
+      localStorage.setItem("users", JSON.stringify(users));
+      
+      const saveBtn = document.getElementById("saveBtn");
+      saveBtn.classList.add("btn-click");
+      setTimeout(() => {
+        window.location.href = "profile.html";
+      }, 500);
+    });
+  </script>
+</body>
+</html>

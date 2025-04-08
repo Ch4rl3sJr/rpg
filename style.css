@@ -1,0 +1,256 @@
+/* Estilo geral e responsividade */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #eceff1, #ffffff);
+    padding: 20px;
+    margin: 0;
+    color: #333;
+  }
+  
+  /* Containers centrais */
+  .login-container,
+  .dashboard-container,
+  .profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 10px;
+  }
+  
+  /* Card padrão */
+  .card, .character-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  /* Títulos */
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1976d2;
+  }
+  
+  h3, h4 {
+    color: #424242;
+    text-align: center;
+  }
+  
+  /* Formulários e labels */
+  form label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  
+  form label input,
+  form label select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  
+  /* Botões */
+  button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+    transition: background 0.3s;
+  }
+  
+  button:hover {
+    background-color: #1976d2;
+  }
+  
+  .btn-click {
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  
+  /* Atributos e status na dashboard */
+  .atributos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .atributos label {
+    flex: 1 1 45%;
+    background: #f5f5f5;
+    padding: 8px;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  
+  #totalPontos {
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0px;
+  }
+  
+  .status {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-left: 5px solid #2196f3;
+    margin: 15px 0;
+    border-radius: 8px;
+  }
+  
+  .status .hp {
+    color: #e53935;
+    font-weight: bold;
+  }
+  
+  .status .mp {
+    color: #1e88e5;
+    font-weight: bold;
+  }
+  
+  /* Estilo da ficha final */
+  .character-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .character-icon {
+    font-size: 2.5rem;
+  }
+  
+  .character-name {
+    font-size: 2rem;
+    margin: 0;
+    color: #1976d2;
+  }
+  
+  .character-meta {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    font-size: 1.1rem;
+  }
+  
+  .character-meta .label {
+    font-weight: bold;
+  }
+  
+  .character-status {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .status-box {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .hp-box {
+    background-color: #ffebee;
+    border: 1px solid #e53935;
+  }
+  
+  .mp-box {
+    background-color: #e3f2fd;
+    border: 1px solid #1e88e5;
+  }
+  
+  .status-icon {
+    font-size: 1.5rem;
+    margin-right: 8px;
+  }
+  
+  .status-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+  
+  .attributes ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .attributes li {
+    background: #f5f5f5;
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-left: 4px solid #2196f3;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  /* Botão editar personagem */
+  .button-link {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #2196f3;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+
+  .button-area {
+    text-align: center; /* Centraliza o conteúdo inline, como o link */
+    margin-top: 20px;
+  }
+  
+  
+  .button-link:hover {
+    background-color: #3700b3;
+  }
+  
+  
+  /* Efeitos visuais */
+  .fade-in {
+    opacity: 0;
+    animation: fadeInAnimation 1s forwards;
+  }
+  
+  @keyframes fadeInAnimation {
+    to { opacity: 1; }
+  }
+  
+  .flash {
+    animation: flashAnimation 300ms;
+  }
+  
+  @keyframes flashAnimation {
+    0% { background-color: #fff; }
+    50% { background-color: #ffffe0; }
+    100% { background-color: #fff; }
+  }
+  
+  /* Responsividade */
+  @media (max-width: 600px) {
+    .atributos label {
+      flex: 1 1 100%;
+    }
+    
+    .character-meta {
+      flex-direction: column;
+      align-items: center;
+    }
+  }

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil do Personagem</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="profile-container fade-in">
+    <div class="character-card">
+      <div class="character-header">
+        <div class="character-icon" id="characterIcon"></div>
+        <h2 class="character-name">Nome do Personagem</h2>
+      </div>
+      <div class="character-meta">
+        <p><span class="label">Raça:</span> Humano</p>
+        <p><span class="label">Classe:</span> Guerreiro</p>
+      </div>
+      <div class="character-status">
+        <div class="status-box hp-box">
+          <div class="status-icon">❤️</div>
+          <div class="status-value" id="hpValue">HP: 0</div>
+        </div>
+        <div class="status-box mp-box">
+          <div class="status-icon">🔷</div>
+          <div class="status-value" id="mpValue">MP: 0</div>
+        </div>
+      </div>
+      <div class="attributes">
+        <h3>Atributos</h3>
+        <ul id="atributosList">
+          <!-- Atributos serão carregados dinamicamente -->
+        </ul>
+        <div class="button-area">
+          <a href="dashboard.html" class="button-link">Editar Personagem</a>
+        </div>        
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const username = localStorage.getItem("loggedInUser");
+    if (!username) window.location.href = "index.html";
+  
+    const users = JSON.parse(localStorage.getItem("users"));
+    const personagem = users[username]?.personagem;
+  
+    function calcularStatus(classe, atr) {
+      let vida = 0, mana = 0;
+      switch (classe) {
+        case "guerreiro":
+          vida = 50 + (2 * atr.constituicao) + (1 * atr.forca);
+          mana = 20 + (1 * atr.carisma);
+          break;
+        case "mago":
+          vida = 30 + (1 * atr.constituicao);
+          mana = 60 + (2 * atr.inteligencia) + (1 * atr.poder);
+          break;
+        case "ladino":
+          vida = 40 + (1 * atr.constituicao) + (1 * atr.destreza);
+          mana = 30 + (1 * atr.inteligencia) + (1 * atr.percepcao);
+          break;
+        case "bárbaro":
+          vida = 60 + (2 * atr.forca) + (1 * atr.constituicao);
+          mana = 10 + (1 * atr.carisma);
+          break;
+        case "clérigo":
+          vida = 45 + (1 * atr.constituicao) + (1 * atr.carisma);
+          mana = 40 + (2 * atr.poder) + (1 * atr.carisma);
+          break;
+        default:
+          break;
+      }
+      return { vida, mana };
+    }
+  
+    if (!personagem) {
+      document.querySelector(".character-card").innerHTML = "<p>Nenhum personagem criado.</p>";
+    } else {
+      let icon = "";
+      switch (personagem.classe) {
+        case "guerreiro": icon = "🛡️"; break;
+        case "mago": icon = "🔮"; break;
+        case "ladino": icon = "🗡️"; break;
+        case "bárbaro": icon = "🪓"; break;
+        case "clérigo": icon = "✝️"; break;
+        default: icon = "👤"; break;
+      }
+  
+      document.getElementById("characterIcon").textContent = icon;
+      document.querySelector(".character-name").textContent = personagem.nome;
+      document.querySelector(".character-meta").innerHTML = `
+        <p><span class="label">Raça:</span> ${personagem.raca}</p>
+        <p><span class="label">Classe:</span> ${personagem.classe}</p>
+      `;
+  
+      const { vida, mana } = calcularStatus(personagem.classe, personagem.atributos);
+      document.getElementById("hpValue").textContent = `HP: ${vida}`;
+      document.getElementById("mpValue").textContent = `MP: ${mana}`;
+      
+      document.getElementById("atributosList").innerHTML = Object.entries(personagem.atributos)
+        .map(([key, value]) => `<li>${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}</li>`)
+        .join('');
+    }
+  </script>
+</body>
+</html>
