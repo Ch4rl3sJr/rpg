@@ -53,7 +53,7 @@
   </div>
   
   <script>
-    // Redireciona se o usuário não estiver logado
+
     const username = localStorage.getItem("loggedInUser");
     if (!username) window.location.href = "index.html";
     
@@ -63,7 +63,7 @@
     const statusDisplay = document.getElementById("statusDisplay");
     const classeSelect = document.getElementById("classe");
     
-    // Atualiza os pontos totais e valida
+
     function atualizarPontos() {
       let total = 0;
       atributos.forEach(input => {
@@ -74,7 +74,7 @@
       return total;
     }
     
-    // Calcula HP e MP com base na classe e atributos
+
     function calcularStatus(classe, atr) {
       let vida = 0, mana = 0;
       switch (classe) {
@@ -104,7 +104,7 @@
       return { vida, mana };
     }
     
-    // Efeito de flash para o bloco de status
+
     function flashStatus() {
       statusDisplay.classList.add("flash");
       setTimeout(() => {
@@ -112,7 +112,7 @@
       }, 300);
     }
     
-    // Atualiza os status (HP/MP) dinamicamente
+
     function atualizarStatus() {
       const atr = {
         forca: parseInt(document.getElementById("forca").value) || 0,
@@ -132,7 +132,7 @@
       flashStatus();
     }
     
-    // Eventos de atualização
+
     atributos.forEach(input => {
       input.addEventListener("input", () => {
         atualizarPontos();
@@ -144,7 +144,7 @@
     atualizarPontos();
     atualizarStatus();
     
-    // Efeito do botão ao salvar: clique com fade out e depois redireciona
+
     document.getElementById("charForm").addEventListener("submit", function(e) {
       e.preventDefault();
       if (atualizarPontos() > 50) {
